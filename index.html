@@ -9,66 +9,81 @@
       font-family: Arial, sans-serif;
     }
 
-    .navbar {
+    .tab-bar {
       display: flex;
+      align-items: center;
       background-color: #1e1e1e;
-      padding: 10px;
+      padding: 8px;
     }
 
-    .nav-button {
+    .tab {
+      background-color: #333;
       color: white;
-      background: none;
-      border: none;
-      margin-right: 15px;
-      font-size: 16px;
+      padding: 8px 15px;
+      margin-right: 5px;
+      border-radius: 5px 5px 0 0;
       cursor: pointer;
     }
 
-    .nav-button.active {
-      font-weight: bold;
-      color: #1e90ff;
+    .tab.active {
+      background-color: #1e90ff;
     }
 
-    .page {
-      display: none;
+    .add-tab {
+      color: white;
+      font-size: 18px;
+      margin-left: auto;
+      cursor: pointer;
+      padding: 5px 10px;
+      border: 1px solid #555;
+      border-radius: 4px;
+      background-color: #2e2e2e;
+    }
+
+    .tab-content {
       padding: 20px;
-    }
-
-    .page.active {
-      display: block;
+      background-color: #f4f4f4;
+      height: 100vh;
     }
   </style>
 </head>
 <body>
 
-  <div class="navbar">
-    <button class="nav-button active" onclick="showPage('home')">Accueil</button>
-    <button class="nav-button" onclick="showPage('search')">Recherche</button>
-    <button class="nav-button" onclick="showPage('settings')">Paramètres</button>
+  <div class="tab-bar" id="tabBar">
+    <div class="tab active" onclick="switchTab('tab1')">Flox</div>
+    <div class="add-tab" onclick="addTab()">+</div>
   </div>
 
-  <div id="home" class="page active">
-    <h2>Bienvenue sur Flox</h2>
-    <p>Ceci est la page d'accueil.</p>
-  </div>
-
-  <div id="search" class="page">
-    <h2>Recherche</h2>
-    <input type="text" placeholder="Tapez votre recherche..." style="width: 100%; padding: 8px;" />
-  </div>
-
-  <div id="settings" class="page">
-    <h2>Paramètres</h2>
-    <p>Ici vous pouvez ajuster les réglages de l'application.</p>
+  <div class="tab-content" id="tabContent">
+    Bienvenue dans Flox.
   </div>
 
   <script>
-    function showPage(id) {
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.querySelectorAll('.nav-button').forEach(b => b.classList.remove('active'));
+    let tabCount = 1;
 
-      document.getElementById(id).classList.add('active');
-      event.target.classList.add('active');
+    function switchTab(tabId) {
+      const content = document.getElementById('tabContent');
+      content.innerHTML = `Vous êtes dans l'onglet : ${tabId}`;
+
+      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+      const targetTab = document.querySelector(`[data-tab="${tabId}"]`);
+      if (targetTab) targetTab.classList.add('active');
+    }
+
+    function addTab() {
+      tabCount++;
+      const tabId = `tab${tabCount}`;
+      const tabBar = document.getElementById('tabBar');
+
+      const newTab = document.createElement('div');
+      newTab.className = 'tab';
+      newTab.innerText = `Onglet ${tabCount}`;
+      newTab.setAttribute('data-tab', tabId);
+      newTab.onclick = () => switchTab(tabId);
+
+      // Insérer avant le bouton "+"
+      tabBar.insertBefore(newTab, document.querySelector('.add-tab'));
+      switchTab(tabId);
     }
   </script>
 
