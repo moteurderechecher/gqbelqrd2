@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
   <meta charset="UTF-8">
   <title>Flox</title>
@@ -9,55 +9,68 @@
       font-family: Arial, sans-serif;
     }
 
-    .tab-bar {
+    .navbar {
       display: flex;
-      background: #2b2b2b;
-      padding: 5px;
-      height: 40px;
+      background-color: #1e1e1e;
+      padding: 10px;
     }
 
-    .tab {
-      padding: 10px 15px;
+    .nav-button {
       color: white;
+      background: none;
+      border: none;
+      margin-right: 15px;
+      font-size: 16px;
       cursor: pointer;
-      background: #3b3b3b;
-      margin-right: 5px;
-      border-radius: 5px 5px 0 0;
     }
 
-    .tab.active {
-      background: #1e90ff;
+    .nav-button.active {
+      font-weight: bold;
+      color: #1e90ff;
     }
 
-    .tab-content {
+    .page {
+      display: none;
       padding: 20px;
-      background: #f4f4f4;
+    }
+
+    .page.active {
+      display: block;
     }
   </style>
 </head>
 <body>
-  <div class="tab-bar">
-    <div class="tab active" onclick="switchTab('home')">Accueil</div>
-    <div class="tab" onclick="switchTab('search')">Recherche</div>
-    <div class="tab" onclick="switchTab('settings')">Paramètres</div>
+
+  <div class="navbar">
+    <button class="nav-button active" onclick="showPage('home')">Accueil</button>
+    <button class="nav-button" onclick="showPage('search')">Recherche</button>
+    <button class="nav-button" onclick="showPage('settings')">Paramètres</button>
   </div>
 
-  <div class="tab-content" id="content">
-    Bienvenue sur Flox.
+  <div id="home" class="page active">
+    <h2>Bienvenue sur Flox</h2>
+    <p>Ceci est la page d'accueil.</p>
+  </div>
+
+  <div id="search" class="page">
+    <h2>Recherche</h2>
+    <input type="text" placeholder="Tapez votre recherche..." style="width: 100%; padding: 8px;" />
+  </div>
+
+  <div id="settings" class="page">
+    <h2>Paramètres</h2>
+    <p>Ici vous pouvez ajuster les réglages de l'application.</p>
   </div>
 
   <script>
-    const tabs = {
-      home: 'Bienvenue sur Flox.',
-      search: 'Tapez une recherche ici...',
-      settings: 'Réglages de votre application.'
-    };
+    function showPage(id) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-button').forEach(b => b.classList.remove('active'));
 
-    function switchTab(tab) {
-      document.getElementById('content').innerText = tabs[tab];
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
       event.target.classList.add('active');
     }
   </script>
+
 </body>
 </html>
