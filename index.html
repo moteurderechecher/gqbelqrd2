@@ -1,91 +1,108 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Flox</title>
   <style>
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
+      font-family: sans-serif;
     }
 
     .tab-bar {
       display: flex;
+      background: #2b2b2b;
+      padding: 5px;
       align-items: center;
-      background-color: #1e1e1e;
-      padding: 8px;
     }
 
     .tab {
-      background-color: #333;
+      background: #444;
       color: white;
-      padding: 8px 15px;
+      padding: 8px 12px;
       margin-right: 5px;
       border-radius: 5px 5px 0 0;
       cursor: pointer;
     }
 
     .tab.active {
-      background-color: #1e90ff;
+      background: #1e90ff;
     }
 
     .add-tab {
+      background: #3a3a3a;
       color: white;
-      font-size: 18px;
-      margin-left: auto;
+      padding: 8px 12px;
+      border-radius: 5px;
       cursor: pointer;
-      padding: 5px 10px;
-      border: 1px solid #555;
-      border-radius: 4px;
-      background-color: #2e2e2e;
+      font-weight: bold;
     }
 
-    .tab-content {
+    .page {
+      display: none;
       padding: 20px;
-      background-color: #f4f4f4;
-      height: 100vh;
+      background: #f0f0f0;
+      height: calc(100vh - 60px);
+    }
+
+    .page.active {
+      display: block;
     }
   </style>
 </head>
 <body>
 
   <div class="tab-bar" id="tabBar">
-    <div class="tab active" onclick="switchTab('tab1')">Flox</div>
+    <div class="tab active" onclick="switchTab(0)">Accueil</div>
     <div class="add-tab" onclick="addTab()">+</div>
   </div>
 
-  <div class="tab-content" id="tabContent">
-    Bienvenue dans Flox.
+  <div id="pages">
+    <div class="page active">
+      <h2>Bienvenue sur Flox</h2>
+      <p>Page d'accueil.</p>
+    </div>
   </div>
 
   <script>
-    let tabCount = 1;
+    let currentTab = 0;
 
-    function switchTab(tabId) {
-      const content = document.getElementById('tabContent');
-      content.innerHTML = `Vous êtes dans l'onglet : ${tabId}`;
+    function switchTab(index) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
 
-      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-      const targetTab = document.querySelector(`[data-tab="${tabId}"]`);
-      if (targetTab) targetTab.classList.add('active');
+      document.querySelectorAll('.tab')[index].classList.add('active');
+      document.querySelectorAll('.page')[index].classList.add('active');
+
+      currentTab = index;
     }
 
     function addTab() {
-      tabCount++;
-      const tabId = `tab${tabCount}`;
       const tabBar = document.getElementById('tabBar');
+      const pages = document.getElementById('pages');
 
+      const tabCount = document.querySelectorAll('.tab').length;
+
+      // Créer un nouvel onglet
       const newTab = document.createElement('div');
       newTab.className = 'tab';
-      newTab.innerText = `Onglet ${tabCount}`;
-      newTab.setAttribute('data-tab', tabId);
-      newTab.onclick = () => switchTab(tabId);
+      newTab.textContent = 'Onglet ' + tabCount;
+      newTab.onclick = () => switchTab(tabCount);
 
-      // Insérer avant le bouton "+"
-      tabBar.insertBefore(newTab, document.querySelector('.add-tab'));
-      switchTab(tabId);
+      // Insérer avant le "+"
+      tabBar.insertBefore(newTab, tabBar.lastElementChild);
+
+      // Créer une nouvelle page
+      const newPage = document.createElement('div');
+      newPage.className = 'page';
+      newPage.innerHTML = `
+        <h2>Nouvel Onglet ${tabCount}</h2>
+        <input type="text" placeholder="Tapez quelque chose..." style="width: 100%; padding: 10px;" />
+      `;
+      pages.appendChild(newPage);
+
+      switchTab(tabCount);
     }
   </script>
-
 </body>
 </html>
